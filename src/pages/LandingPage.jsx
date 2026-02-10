@@ -7,7 +7,7 @@ const LandingPage = () => {
             <div className="hero">
                 <h1>Regalos Digitales Románticos</h1>
                 <p>Creamos momentos inolvidables para tus seres queridos.</p>
-                <Link to="/14" className="cta-button">Ver Ejemplo (14 de Febrero)</Link>
+                <Link to="/14defebrero" className="cta-button">Ver Ejemplo (14 de Febrero)</Link>
             </div>
             <div className="features">
                 <div className="feature-card">
