@@ -347,7 +347,7 @@ const ClientPage = () => {
             {/* WhatsApp Float Button - Conditional */}
             {showWhatsApp && (
                 <a
-                    href="https://wa.me/5216151559659"
+                    href="https://wa.me/5216151559659?text=Hola,%20quiero%20personalizar%20una%20carta"
                     className="whatsapp-float"
                     target="_blank"
                     rel="noopener noreferrer"
