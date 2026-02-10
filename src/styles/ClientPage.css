@@ -1,0 +1,585 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Nunito:wght@400;700&display=swap');
+
+/* Reset and Core Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.client-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Nunito', sans-serif;
+    overflow: hidden;
+    perspective: 1000px;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+.scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 1s ease-in-out;
+    z-index: 10;
+    /* Above carousel */
+}
+
+/* Background & Blur */
+.carousel-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    transition: filter 1.5s ease;
+    /* Smooth blur transition */
+}
+
+/* Apply blur when open, but keep some visibility for depth */
+.carousel-background.blurred {
+    filter: blur(8px) brightness(0.9);
+}
+
+.carousel-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: opacity 1s ease-in-out;
+}
+
+/* --- GRASS BASE --- */
+.grass {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: #4caf50 url('/grass_base.svg') repeat-x bottom center;
+    background-size: contain;
+    z-index: 10;
+    pointer-events: none;
+    border-radius: 50% 50% 0 0 / 20px 20px 0 0;
+    display: none;
+    /* Hide grass based on new romantic aesthetic request if it clashes, or keep? Keeping for now but maybe user wants it cleaner. Let's keep it but make it blend better or remove if it looks cartoony against "romantic" images. User asked for "stronger colors". Let's keep it. */
+}
+
+/* --- ENVELOPE STYLES --- */
+.envelope-wrapper {
+    position: absolute;
+    z-index: 50;
+    transition: opacity 0.8s, transform 0.8s;
+}
+
+.envelope-wrapper.fade-out {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+}
+
+.envelope {
+    position: relative;
+    width: 340px;
+    /* Slightly wider */
+    height: 240px;
+    background: #e91e63;
+    /* Stronger Pink/Red */
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s;
+}
+
+.envelope:hover {
+    transform: scale(1.02);
+}
+
+/* Flap color slightly lighter/different to distinguish */
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 170px solid transparent;
+    border-right: 170px solid transparent;
+    border-top: 130px solid #f06292;
+    /* Lighter strong pink */
+    transform-origin: top;
+    transition: transform 0.6s 0.2s cubic-bezier(0.25, 1, 0.5, 1), z-index 0.6s;
+    z-index: 5;
+}
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+
+.pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 170px solid #c2185b;
+    /* Darker strong pink */
+    border-right: 170px solid #c2185b;
+    border-bottom: 120px solid #ad1457;
+    border-top: 120px solid transparent;
+    border-radius: 0 0 10px 10px;
+    z-index: 4;
+}
+
+/* Heart Seal - Centered & Larger */
+.heart-seal {
+    position: absolute;
+    top: 50%;
+    /* Exact center */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Center perfectly */
+    width: 80px;
+    /* Larger */
+    height: 80px;
+    background: #fff;
+    clip-path: path("M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z");
+    /* The SVG path is based on a 24x24 viewBox, so to scale it up we might need to use scale transform or a different approach if clip-path doesn't scale content. 
+       Actually, `clip-path: path(...)` coordinates are absolute pixels in CSS if not unitless in SVG. 
+       Better approach for a crisp heart at any size is to use an SVG background or mask, OR just scale the element that has the shape.
+       Let's try scaling the element significantly since the path is small. */
+    transform: translate(-50%, -50%) scale(3.5);
+    /* Scale up the small path */
+    z-index: 6;
+    animation: pulse 1.5s infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 30% 30%, #ffcdd2, #d32f2f);
+    /* Red gradient heart */
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(3.5);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(3.8);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(3.5);
+    }
+}
+
+/* Text Positioning */
+.text-top {
+    position: absolute;
+    top: -60px;
+    /* Above envelope */
+    width: 100%;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.2rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 60;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.text-bottom {
+    position: absolute;
+    bottom: -50px;
+    /* Below envelope */
+    width: 100%;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 60;
+    pointer-events: none;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* --- SEED --- */
+.seed {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #5d4037;
+    border-radius: 50% 100% 0 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0) rotate(45deg);
+    z-index: 2;
+    opacity: 0;
+}
+
+/* --- TREE CONTAINER --- */
+.tree-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    transition: left 1.5s ease-in-out, transform 1.5s ease-in-out;
+}
+
+.tree-wrapper.move-left {
+    left: 25%;
+    transform: translateX(-50%) scale(0.9);
+}
+
+svg.tree-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.branch-line {
+    stroke: #3e2723;
+    /* Darker brown */
+    stroke-linecap: round;
+    fill: none;
+}
+
+.leaf-heart {
+    position: absolute;
+    color: #d81b60;
+    /* Strong pink */
+    font-size: 0;
+    opacity: 0;
+    transform-origin: center;
+}
+
+/* --- LETTER / PAPER --- */
+.letter-container {
+    position: absolute;
+    /* Center it more if tree moves to side, but let's keep composition */
+    right: 10%;
+    top: 50%;
+    transform: translateY(-50%) translateX(50px);
+    width: 40%;
+    max-width: 500px;
+    height: 70vh;
+    background: #fff;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    /* Softer corners */
+    opacity: 0;
+    z-index: 40;
+    transition: all 1.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden;
+    background-image: linear-gradient(#fce4ec 1px, transparent 1px);
+    /* Pinkish lines */
+    background-size: 100% 1.5rem;
+}
+
+.letter-container.show {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+.letter-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.8rem;
+    /* Slightly larger */
+    line-height: 1.5rem;
+    color: #880e4f;
+    /* Darker pink text */
+    width: 100%;
+    margin-top: 6px;
+    white-space: pre-wrap;
+    overflow-y: auto;
+    max-height: 100%;
+}
+
+.cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2rem;
+    background-color: #880e4f;
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* --- BACKGROUND PARTICLES --- */
+.falling-particle {
+    position: absolute;
+    top: -10vh;
+    pointer-events: none;
+    z-index: 100;
+    /* Rain on top */
+}
+
+.ground-line {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    height: 1px;
+    background: rgba(93, 64, 55, 0.2);
+    z-index: 0;
+}
+
+/* --- UI ELEMENTS (WhatsApp, Footer) --- */
+
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 80px;
+    /* Above footer */
+    right: 40px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+}
+
+.footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.footer a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* --- MUSIC CONTROL --- */
+.music-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+.music-control:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(1.1);
+}
+
+/* --- GIFT BOX --- */
+.gift-container {
+    position: absolute;
+    bottom: 20%;
+    right: 20%;
+    z-index: 45;
+    cursor: pointer;
+    animation: bounce 2s infinite;
+    transition: transform 0.3s;
+}
+
+.gift-container:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.gift-box {
+    font-size: 50px;
+    filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.3));
+}
+
+.gift-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s;
+}
+
+.gift-modal.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.gift-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 80%;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    transform: scale(0.8);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 4px solid #e91e63;
+}
+
+.gift-modal.show .gift-content {
+    transform: scale(1);
+    animation: confetti-pop 0.5s ease-out;
+}
+
+.gift-icon-large {
+    font-size: 80px;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.close-gift {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #e91e63;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.close-gift:hover {
+    background: #c2185b;
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    .envelope {
+        width: 280px;
+        height: 200px;
+    }
+
+    .flap {
+        border-left: 140px solid transparent;
+        border-right: 140px solid transparent;
+        border-top-width: 110px;
+    }
+
+    .pocket {
+        border-left: 140px solid #c2185b;
+        border-right: 140px solid #c2185b;
+        border-bottom-width: 100px;
+    }
+
+    .tree-wrapper.move-left {
+        left: 50%;
+        transform: translateX(-50%) scale(0.6);
+        opacity: 0.3;
+        /* Fade tree slightly */
+        bottom: 10%;
+    }
+
+    .letter-container.show {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+        transform: translateY(-50%) translateX(0) scale(1.0);
+        height: 60vh;
+        max-width: none;
+        padding: 20px;
+    }
+
+    .letter-text {
+        font-size: 1.2rem;
+    }
+
+    .gift-container {
+        bottom: 15%;
+        right: 10%;
+    }
+
+    .whatsapp-float {
+        width: 50px;
+        height: 50px;
+        bottom: 60px;
+        right: 20px;
+        font-size: 25px;
+    }
+
+    .footer {
+        font-size: 0.7rem;
+    }
+}

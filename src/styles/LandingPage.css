@@ -1,0 +1,147 @@
+.landing-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Stronger romantic gradient */
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
+    font-family: 'Nunito', sans-serif;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add some background shapes or texture if possible, 
+   but for now a strong gradient and nice typography work well */
+
+.hero {
+    z-index: 10;
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 4.5rem;
+    color: #880e4f;
+    /* Deep pink/red */
+    margin-bottom: 1.5rem;
+    font-family: 'Dancing Script', cursive;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+}
+
+.hero p {
+    font-size: 1.5rem;
+    color: #4a148c;
+    /* Deep purple/pink */
+    margin-bottom: 3rem;
+    font-weight: 600;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 18px 40px;
+    background-color: #d81b60;
+    /* Strong Pink */
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(216, 27, 96, 0.4);
+    border: 2px solid white;
+}
+
+.cta-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(216, 27, 96, 0.6);
+    background-color: #c2185b;
+}
+
+.features {
+    display: flex;
+    gap: 30px;
+    margin-top: 80px;
+    flex-wrap: wrap;
+    justify-content: center;
+    z-index: 10;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(136, 14, 79, 0.1);
+    width: 280px;
+    transition: transform 0.3s;
+    border-bottom: 5px solid #d81b60;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+}
+
+.feature-card h2 {
+    color: #880e4f;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    font-family: 'Dancing Script', cursive;
+}
+
+.feature-card p {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* Reuse Floating Elements from ClientPage.css essentially, 
+   but scoped here if needed or global. 
+   We will duplicate styles for simplicity as requested "landing saying... whatsapp... footer".
+*/
+
+.whatsapp-float-landing {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 80px;
+    right: 40px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+.whatsapp-float-landing:hover {
+    transform: scale(1.1);
+}
+
+.footer-landing {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.9rem;
+    color: #880e4f;
+    /* Darker to be visible on pink bg */
+    z-index: 1000;
+}
+
+.footer-landing a {
+    color: #d81b60;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer-landing a:hover {
+    text-decoration: underline;
+}
